@@ -10,10 +10,14 @@ import time
 import uuid
 import base64
 
-learner = load_learner(path='')
 
-UPLOAD_FOLDER = 'uploads'
-ALLOWED_EXTENSIONS = set(['jpg', 'jpeg'])
+#loading the export file 
+learner = load_learner(path='') 
+
+#defenition of variables
+UPLOAD_FOLDER = 'uploads' 
+ALLOWED_EXTENSIONS = set(['jpg', 'jpeg']) 
+
 
 def get_as_base64(url):
     return base64.b64encode(requests.get(url).content)
