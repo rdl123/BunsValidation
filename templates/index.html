@@ -1,13 +1,8 @@
-<html>
-<title>Bake Prediction with FastAI</title>
-<!-- stylesheets -->
-<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/yeti/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="{{ url_for('static', filename='main.css') }}" rel="stylesheet">
-<div class="row">
- 
+{%extends "layout.html" %}
+{% block body %}
+<div class="row mt-2">
   <div class="col-md-7">
     <h1>Bake Prediction ?</h1>
-    <a href="./login">Se connecter</a>
 	<h2>Upload an image</h2>
     <br>
     <form action="" method=post enctype=multipart/form-data>
@@ -29,6 +24,18 @@
   </div>
  
 </div>
-
-</html>
  
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+

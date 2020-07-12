@@ -1,7 +1,7 @@
 # Usage: python app.py
 import os
 import boto3
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify,flash,session,logging
 from werkzeug.utils import secure_filename
 from fastai.vision import *
 from fastai.metrics import error_rate
@@ -10,6 +10,9 @@ import time
 import uuid
 import base64
 
+
+
+#connecting to the DynamoDb 
 dynamo_client = boto3.client('dynamodb')
 DB = boto3.resource('dynamodb')
 table = DB.Table('Utilisateur')
@@ -132,33 +135,91 @@ def get_users(index):
         }
     )
     return response["Item"]
+
+
 print(table.item_count)
 
-# print(dict((k,get_users(1)[k]) for k in ['Email']))
-print(get_users(1).get('Email'))
+
+# a function that inserts the Admin to AWS Database
+def insert_admin(index, nom, prenom, email, password, IsSuperAdmin):
+    response = table.put_item(
+        Item={
+            'Id': index,
+            'Email': email,
+            'IsSuperAdmin': IsSuperAdmin,
+            'Nom': nom,
+            'Password': password,
+            'Prenom': prenom
+        }
+    )
+    return response["ResponseMetadata"]["HTTPStatusCode"]
 
 
 
-# Route for handling the login page logic
+# Route for handling the login page logic.....................................
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
         k = 1
-        while k<table.item_count+1:
+        while k <= table.item_count:
             if email == get_users(k).get('Email') and password == get_users(k).get('Password'):
-                return redirect(url_for('admin'))
+                if get_users(k).get('IsSuperAdmin')==True:  #if the admin is a super admin than we redirect him to the superadmin page
+                    session["log"] = True
+                    flash("your know logged in","success")
+                    return redirect(url_for('admin'))
+                else:
+                    session["log"] = True
+                    flash("your know logged in","success")
+                    return redirect(url_for('regular_admin'))
             else:
                 k = k + 1
+        flash("this account doesn't exists","danger")
     return render_template('login.html')
 
-
+#SuperAdmin page where he will be adding other admins.......................................
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
-    return '<h1>admin<h1>'
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        nom = request.form['nom']
+        prenom = request.form['prenom']
+        isSuperAdmin = request.form['isSuperAdmin']
+        confirmpassword=request.form['confirmpassword']
+        if password==confirmpassword:
+            insert_admin(table.item_count+1, nom, prenom, email, password, isSuperAdmin) #inserts the admin to DynamoDb Database
+            flash("An admin has been added seccusfully","success")
+        else:
+            flash("password does not match","danger")
+            return render_template('admin.html')
+    return render_template('admin.html')
 
+
+
+#regular admin page...........................................
+@app.route('/regular_admin', methods=['GET', 'POST'])
+def regular_admin():
+    return render_template('regular_admin.html')
+
+
+# the home page
+@app.route('/home', methods=['GET', 'POST'])
+def home():
+    return render_template('home.html')
+
+
+
+
+#Handling the logout
+@app.route('/logout')
+def log_out():
+    session.clear() #destroying the session
+    flash("You are know logged out ","success")
+    return redirect(url_for('login'))
 
 if __name__ == "__main__":
+    app.secret_key="1234567"
     app.debug = True
     app.run()

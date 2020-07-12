@@ -1,0 +1,38 @@
+{%extends "layout.html" %}
+
+
+{% block body %}
+<div class="container">
+    <h1>Registration</h1>
+    <br>
+    <form action="" method="post">
+           <div class="form-group">
+                <input class="form-control" type="text" placeholder="Nom" name="nom" required >
+        </div>
+    <div class="form-group">
+        <input  class="form-control" type="text" placeholder="Prenom" name="prenom" required>
+    </div>
+    <div class="form-group">
+        <input  class="form-control" type="email" placeholder="email" name="email" required >
+    </div>
+    <div class="form-group">
+        <input class="form-control" type="password" placeholder="Password" name="password" required>
+    </div>
+    <div class="form-group">
+        <input class="form-control" type="password" placeholder="Confirm Password" name="confirmpassword" required>
+    </div>
+ 
+        
+        <select class="browser-default custom-select" name="isSuperAdmin">
+            <option selected>Is Super Admin</option>
+            <option value="True">True</option>
+            <option value="False">False</option>
+          </select>
+        
+  
+    
+       <input  class="btn btn-primary mt-2" type="submit" value="Register">
+    </form>
+ 
+</div>
+{% endblock %}
