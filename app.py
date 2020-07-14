@@ -1,7 +1,7 @@
 # Usage: python app.py
 import os
 import boto3
-from flask import Flask, render_template, request, redirect, url_for, jsonify,flash,session,logging
+from flask import Flask, render_template, request, redirect, url_for, jsonify,flash,session
 from werkzeug.utils import secure_filename
 from fastai.vision import *
 from fastai.metrics import error_rate
@@ -163,10 +163,10 @@ def login():
         email = request.form['email']
         password = request.form['password']
         k = 1
-        while k <= table.item_count:
+        while k <= table.item_count+1:
             if email == get_users(k).get('Email') and password == get_users(k).get('Password'):
                 if get_users(k).get('IsSuperAdmin')==True:  #if the admin is a super admin than we redirect him to the superadmin page
-                    session["log"] = True
+                    session["logAdmin"] = True
                     flash("your know logged in","success")
                     return redirect(url_for('admin'))
                 else:
