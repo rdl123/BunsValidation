@@ -1,5 +1,7 @@
 # Usage: python app.py
 import os
+import torch
+import torch.nn as nn
 import boto3
 from flask import Flask, render_template, request, redirect, url_for, jsonify,flash,session
 from werkzeug.utils import secure_filename
@@ -9,7 +11,26 @@ import numpy as np
 import time
 import uuid
 import base64
+from openpyxl import *
+from model_retraining import retrain_model,insertImage
 
+'''
+
+#Loading the xls File
+wb=load_workbook("../TPML/bake10/Test.xlsx")
+#loading the work sheet
+ws=wb["Feuil1"]
+#Access the cell located at row 6 and column 1 using a variable of type Cell
+wcell1=ws.cell(40,1)
+wcell1=ws.cell(40,1)
+wcell1.value=5
+#The above statement assigns value 5 to the at row-6 and column-1
+wcell2=ws.cell(40,2)
+wcell2.value="Williams"
+#The above statement assigns value "Williams" to the at row-6 and column-2
+#Saving the excel file using "wb.save" method
+wb.save("../TPML/bake10/Test.xlsx")
+'''
 
 
 #connecting to the DynamoDb 
@@ -17,7 +38,7 @@ dynamo_client = boto3.client('dynamodb')
 DB = boto3.resource('dynamodb')
 table = DB.Table('Utilisateur')
 
-# loading the export file
+# loading the export.pkl file
 learner = load_learner(path='')
 
 # defenition of variables
@@ -137,7 +158,7 @@ def get_users(index):
     return response["Item"]
 
 
-print(table.item_count)
+
 
 
 # a function that inserts the Admin to AWS Database
@@ -201,7 +222,20 @@ def admin():
 #regular admin page...........................................
 @app.route('/regular_admin', methods=['GET', 'POST'])
 def regular_admin():
+    if request.method == 'POST':
+        file = request.files['file']
+        commentaire=request.form['Commentaire']
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(file_path)
+        shutil.move('C:/Users/THINKPAD/Desktop/MBI/Bake_fastai_model_deploy/uploads/'+filename, 'C:/Users/THINKPAD/Desktop/MBI/Bake_fastai_model_deploy/imageTesting/'+commentaire+'.jpg')
+        #insertImage(filename,commentaire)
+        #retrain_model()
     return render_template('regular_admin.html')
+
+
+
 
 
 # the home page
@@ -209,7 +243,9 @@ def regular_admin():
 def home():
     return render_template('home.html')
 
-
+@app.route('/checkImages',methods=['GET','POST'])
+def checkimages():
+    return render_template('checkImages.html')
 
 
 #Handling the logout
@@ -218,6 +254,7 @@ def log_out():
     session.clear() #destroying the session
     flash("You are know logged out ","success")
     return redirect(url_for('login'))
+
 
 if __name__ == "__main__":
     app.secret_key="1234567"
