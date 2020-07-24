@@ -1,5 +1,37 @@
 {%extends "layout.html" %}
 
 {% block body %}
-<h1>ALi is a LOoser</h1>
+
+<table class=" table table-striped table-bordered table-sm ml-2">
+  
+      <thead>
+        <tr>
+          <th  scope="col">image</th>
+          <th  scope="col">commentaire</th>
+          
+        </tr> 
+      </thead>
+        <tbody>
+          
+            {% for name in image_names %}
+            <tr>
+                  <td>
+                    <img height=15% width=12%  class="img-fluid" alt="Responsive image" loading="eager" src="{{ url_for('static', filename='imageTesting/' + name) }} " >
+                    {{name}}
+                  </td>
+                  <td>comments</td>
+                <td><button name="{{name}}" type="button" class="btn btn-primary" onclick="{console.log('hello')}">validate</button></td>
+                  <td><button name="{{name}}" type="button" class="btn btn-warning">Delete</button></td>
+            </tr>
+            
+            {%endfor%}
+       
+        </tbody>
+   
+   
+
+</table>
+    
+
+
 {% endblock %}

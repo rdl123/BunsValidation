@@ -229,7 +229,9 @@ def regular_admin():
             filename = secure_filename(file.filename)
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(file_path)
-        shutil.move('C:/Users/THINKPAD/Desktop/MBI/Bake_fastai_model_deploy/uploads/'+filename, 'C:/Users/THINKPAD/Desktop/MBI/Bake_fastai_model_deploy/imageTesting/'+commentaire+'.jpg')
+        shutil.move('C:/Users/THINKPAD/Desktop/MBI/Bake_fastai_model_deploy/uploads/'+filename, 'C:/Users/THINKPAD/Desktop/MBI/Bake_fastai_model_deploy/static/imageTesting/'+filename)
+        image_names = os.listdir('C:/Users/THINKPAD/Desktop/MBI/Bake_fastai_model_deploy/static/imageTesting/')
+        print(image_names)
         #insertImage(filename,commentaire)
         #retrain_model()
     return render_template('regular_admin.html')
@@ -245,7 +247,8 @@ def home():
 
 @app.route('/checkImages',methods=['GET','POST'])
 def checkimages():
-    return render_template('checkImages.html')
+    image_names = os.listdir('C:/Users/THINKPAD/Desktop/MBI/Bake_fastai_model_deploy/static/imageTesting/')
+    return render_template('checkImages.html',image_names=image_names)
 
 
 #Handling the logout
