@@ -17,11 +17,11 @@
             <tr>
                   <td>
                     <img height=15% width=12%  class="img-fluid" alt="Responsive image" loading="eager" src="{{ url_for('static', filename='imageTesting/' + name) }} " >
-                    {{name}}
+                    {{name.split("@")[1]}}
                   </td>
-                  <td>comments</td>
-                <td><button name="{{name}}" type="button" class="btn btn-primary" onclick="{console.log('hello')}">validate</button></td>
-                  <td><button name="{{name}}" type="button" class="btn btn-warning">Delete</button></td>
+                  <td>{{name.split("@")[0]}}</td>
+                <td><button class="btn btn-primary"><a href="/Validate/{{name}}">Validate</a></button></td>
+                  <td><button class="btn btn-warning"><a href="/Delete/{{name}}">Delete</a></button></td>
             </tr>
             
             {%endfor%}
@@ -31,7 +31,7 @@
    
 
 </table>
-    
+<button class="btn btn-success"><a href="/StartTraining" style="text-decoration: none;">Training</a></button>
 
 
 {% endblock %}

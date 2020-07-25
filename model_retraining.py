@@ -9,9 +9,10 @@ from openpyxl import *
 
 
 def insertImage(imageFile,commentaire):
-    shutil.move('C:/Users/THINKPAD/Desktop/MBI/Bake_fastai_model_deploy/uploads/'+imageFile, 'C:/Users/THINKPAD/Desktop/MBI/TPML/bake10/Image/'+imageFile)
+    shutil.move('../Bake_fastai_model_deploy/static/imageTesting/'+imageFile, '../TPML/bake10/Image/'+imageFile.split("@")[1])
     wb=load_workbook("../TPML/bake10/Train.xlsx")
     ws=wb["Feuil1"]
+    imageFile=imageFile.split("@")[1]
     filename=imageFile[0:-4]
     maxrows=ws.max_row+1
     wcell1=ws.cell(maxrows,1)

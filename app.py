@@ -14,25 +14,6 @@ import base64
 from openpyxl import *
 from model_retraining import retrain_model,insertImage
 
-'''
-
-#Loading the xls File
-wb=load_workbook("../TPML/bake10/Test.xlsx")
-#loading the work sheet
-ws=wb["Feuil1"]
-#Access the cell located at row 6 and column 1 using a variable of type Cell
-wcell1=ws.cell(40,1)
-wcell1=ws.cell(40,1)
-wcell1.value=5
-#The above statement assigns value 5 to the at row-6 and column-1
-wcell2=ws.cell(40,2)
-wcell2.value="Williams"
-#The above statement assigns value "Williams" to the at row-6 and column-2
-#Saving the excel file using "wb.save" method
-wb.save("../TPML/bake10/Test.xlsx")
-'''
-
-
 #connecting to the DynamoDb 
 dynamo_client = boto3.client('dynamodb')
 DB = boto3.resource('dynamodb')
@@ -229,9 +210,7 @@ def regular_admin():
             filename = secure_filename(file.filename)
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(file_path)
-        shutil.move('C:/Users/THINKPAD/Desktop/MBI/Bake_fastai_model_deploy/uploads/'+filename, 'C:/Users/THINKPAD/Desktop/MBI/Bake_fastai_model_deploy/static/imageTesting/'+filename)
-        image_names = os.listdir('C:/Users/THINKPAD/Desktop/MBI/Bake_fastai_model_deploy/static/imageTesting/')
-        print(image_names)
+        shutil.move('../Bake_fastai_model_deploy/uploads/'+filename, '../Bake_fastai_model_deploy/static/imageTesting/'+commentaire+'@'+filename)
         #insertImage(filename,commentaire)
         #retrain_model()
     return render_template('regular_admin.html')
@@ -247,9 +226,28 @@ def home():
 
 @app.route('/checkImages',methods=['GET','POST'])
 def checkimages():
-    image_names = os.listdir('C:/Users/THINKPAD/Desktop/MBI/Bake_fastai_model_deploy/static/imageTesting/')
+    image_names = os.listdir('../Bake_fastai_model_deploy/static/imageTesting/')  #List of images to be validated
     return render_template('checkImages.html',image_names=image_names)
 
+
+#Deletes an image 
+@app.route('/Delete/<string:name>',methods=['GET','POST'])
+def Delete(name):
+    os.remove("../Bake_fastai_model_deploy/static/imageTesting/"+name)
+    return redirect(url_for('checkimages'))
+
+#Validates an image
+@app.route('/Validate/<string:name>',methods=['GET','POST'])
+def Validate(name):
+    commentaire=name.split("@")[0]
+    insertImage(name,commentaire)
+    return redirect(url_for('checkimages'))
+
+#Start the Training of the ML model
+@app.route('/StartTraining')
+def Train():
+    retrain_model()
+    return redirect(url_for('checkimages'))
 
 #Handling the logout
 @app.route('/logout')
