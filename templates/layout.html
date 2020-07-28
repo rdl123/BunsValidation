@@ -13,7 +13,7 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <a class="navbar-brand" href="#">Navbar</a>
+        <a class="navbar-brand" href="./home">BunsVision</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -22,13 +22,15 @@
             <a class="nav-item nav-link " href="./home">Home</a>
             <a class="nav-item nav-link" href="/">checking</a>
             {% if session.log%}
-              <a class="nav-item nav-link " href="#">Ajouter une Image</a>  
+              <a class="nav-item nav-link " href="./regular_admin">Ajouter une Image</a>  
+              <a class="nav-item nav-link " href="./Profil">Mon Profil</a> 
                <a class="nav-item nav-link " href="./logout">logout</a>
             {% else %}
                  {% if session.logAdmin%}
-                      <a class="nav-item nav-link " href="#">Ajouter une Image</a>  
+                      <a class="nav-item nav-link " href="./regular_admin">Ajouter une Image</a>  
                       <a class="nav-item nav-link " href="./admin">Ajouter un Admin</a>  
                       <a class="nav-item nav-link " href="./checkImages">check images</a> 
+                      <a class="nav-item nav-link " href="./Profil">Mon Profil</a> 
                       <a class="nav-item nav-link " href="./logout">logout</a>
                  {% else%}
                  <a class="nav-item nav-link " href="./login">Login</a>

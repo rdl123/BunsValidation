@@ -3,7 +3,7 @@ import os
 import torch
 import torch.nn as nn
 import boto3
-from flask import Flask, render_template, request, redirect, url_for, jsonify,flash,session
+from flask import Flask, render_template, request, redirect, url_for, jsonify, flash, session
 from werkzeug.utils import secure_filename
 from fastai.vision import *
 from fastai.metrics import error_rate
@@ -12,9 +12,9 @@ import time
 import uuid
 import base64
 from openpyxl import *
-from model_retraining import retrain_model,insertImage
+from model_retraining import retrain_model, insertImage
 
-#connecting to the DynamoDb 
+# connecting to the DynamoDb
 dynamo_client = boto3.client('dynamodb')
 DB = boto3.resource('dynamodb')
 table = DB.Table('Utilisateur')
@@ -139,9 +139,6 @@ def get_users(index):
     return response["Item"]
 
 
-
-
-
 # a function that inserts the Admin to AWS Database
 def insert_admin(index, nom, prenom, email, password, IsSuperAdmin):
     response = table.put_item(
@@ -157,6 +154,22 @@ def insert_admin(index, nom, prenom, email, password, IsSuperAdmin):
     return response["ResponseMetadata"]["HTTPStatusCode"]
 
 
+def update_admin(index, nom, prenom, email, password):
+    response = table.update_item(
+        Key={
+            'Id': index
+        },
+        UpdateExpression="set Nom=:n, Prenom=:p, Email=:e , Password=:a",
+        ExpressionAttributeValues={
+            ':n': nom,
+            ':p': prenom,
+            ':e': email,
+            ':a': password
+        },
+        ReturnValues="UPDATED_NEW"
+    )
+    return response
+
 
 # Route for handling the login page logic.....................................
 @app.route('/login', methods=['GET', 'POST'])
@@ -165,22 +178,33 @@ def login():
         email = request.form['email']
         password = request.form['password']
         k = 1
-        while k <= table.item_count+1:
+        while k <= table.item_count + 1:
             if email == get_users(k).get('Email') and password == get_users(k).get('Password'):
-                if get_users(k).get('IsSuperAdmin')==True:  #if the admin is a super admin than we redirect him to the superadmin page
+                if get_users(k).get('IsSuperAdmin') == True:  # if the admin is a super admin than we redirect him to the superadmin page
                     session["logAdmin"] = True
-                    flash("your know logged in","success")
+                    session['username'] = get_users(k).get('Nom')
+                    session['userprename'] = get_users(k).get('Prenom')
+                    session['userEmail'] = get_users(k).get('Email')
+                    session['userPassword'] = get_users(k).get('Password')
+                    session['id'] = k
+                    flash("your know logged in", "success")
                     return redirect(url_for('admin'))
                 else:
                     session["log"] = True
-                    flash("your know logged in","success")
+                    session['username'] = get_users(k).get('Nom')
+                    session['userprename'] = get_users(k).get('Prenom')
+                    session['userEmail'] = get_users(k).get('Email')
+                    session['userPassword'] = get_users(k).get('Password')
+                    session['id'] = k
+                    flash("your know logged in", "success")
                     return redirect(url_for('regular_admin'))
             else:
                 k = k + 1
-        flash("this account doesn't exists","danger")
+        flash("this account doesn't exists", "danger")
     return render_template('login.html')
 
-#SuperAdmin page where he will be adding other admins.......................................
+
+# SuperAdmin page where he will be adding other admins.......................................
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
     if request.method == 'POST':
@@ -189,34 +213,30 @@ def admin():
         nom = request.form['nom']
         prenom = request.form['prenom']
         isSuperAdmin = request.form['isSuperAdmin']
-        confirmpassword=request.form['confirmpassword']
-        if password==confirmpassword:
-            insert_admin(table.item_count+1, nom, prenom, email, password, isSuperAdmin) #inserts the admin to DynamoDb Database
-            flash("An admin has been added seccusfully","success")
+        confirmpassword = request.form['confirmpassword']
+        if password == confirmpassword:
+            insert_admin(table.item_count + 1, nom, prenom, email, password, isSuperAdmin)  # inserts the admin to DynamoDb Database
+            flash("An admin has been added seccusfully", "success")
         else:
-            flash("password does not match","danger")
+            flash("password does not match", "danger")
             return render_template('admin.html')
     return render_template('admin.html')
 
 
-
-#regular admin page...........................................
+# regular admin page...........................................
 @app.route('/regular_admin', methods=['GET', 'POST'])
 def regular_admin():
     if request.method == 'POST':
         file = request.files['file']
-        commentaire=request.form['Commentaire']
+        commentaire = request.form['Commentaire']
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(file_path)
-        shutil.move('../Bake_fastai_model_deploy/uploads/'+filename, '../Bake_fastai_model_deploy/static/imageTesting/'+commentaire+'@'+filename)
-        #insertImage(filename,commentaire)
-        #retrain_model()
+        shutil.move('../Bake_fastai_model_deploy/uploads/' + filename,
+                    '../Bake_fastai_model_deploy/static/imageTesting/' + commentaire + '@' + filename)
+        flash("Your image Has been added ", "primary")
     return render_template('regular_admin.html')
-
-
-
 
 
 # the home page
@@ -224,40 +244,65 @@ def regular_admin():
 def home():
     return render_template('home.html')
 
-@app.route('/checkImages',methods=['GET','POST'])
+
+@app.route('/checkImages', methods=['GET', 'POST'])
 def checkimages():
-    image_names = os.listdir('../Bake_fastai_model_deploy/static/imageTesting/')  #List of images to be validated
-    return render_template('checkImages.html',image_names=image_names)
+    image_names = os.listdir('../Bake_fastai_model_deploy/static/imageTesting/')  # List of images to be validated
+    return render_template('checkImages.html', image_names=image_names)
 
 
-#Deletes an image 
-@app.route('/Delete/<string:name>',methods=['GET','POST'])
+# Deletes an image
+@app.route('/Delete/<string:name>', methods=['GET', 'POST'])
 def Delete(name):
-    os.remove("../Bake_fastai_model_deploy/static/imageTesting/"+name)
+    os.remove("../Bake_fastai_model_deploy/static/imageTesting/" + name)
     return redirect(url_for('checkimages'))
 
-#Validates an image
-@app.route('/Validate/<string:name>',methods=['GET','POST'])
+
+# Validates an image
+@app.route('/Validate/<string:name>', methods=['GET', 'POST'])
 def Validate(name):
-    commentaire=name.split("@")[0]
-    insertImage(name,commentaire)
+    commentaire = name.split("@")[0]
+    insertImage(name, commentaire)
     return redirect(url_for('checkimages'))
 
-#Start the Training of the ML model
+
+# Start the Training of the ML model
 @app.route('/StartTraining')
 def Train():
     retrain_model()
     return redirect(url_for('checkimages'))
 
-#Handling the logout
+
+@app.route('/Profil', methods=['GET', 'POST'])
+def Profil():
+    return render_template('Profil.html')
+
+
+# Handling the logout
 @app.route('/logout')
 def log_out():
-    session.clear() #destroying the session
-    flash("You are know logged out ","success")
+    session.clear()  # destroying the session
+    flash("You are know logged out ", "success")
     return redirect(url_for('login'))
 
 
+@app.route('/modifier', methods=['GET', 'POST'])
+def modifier():
+    if request.method == 'POST':
+        nom = request.form['nom']
+        prenom = request.form['prenom']
+        password = request.form['password']
+        email = request.form['email']
+        confirmpassword = request.form['confirmpassword']
+        index = session['id']
+        if password == confirmpassword:
+            update_admin(index, nom, prenom, email, password)
+        else:
+            flash("password doesn't match", "danger")
+    return render_template('modifierProfil.html')
+
+
 if __name__ == "__main__":
-    app.secret_key="1234567"
+    app.secret_key = "1234567"
     app.debug = True
     app.run()
