@@ -1,0 +1,33 @@
+{%extends "layout.html" %}
+{% block body %}
+<div class="container mt-5">
+  choose your Bun:
+  <br>
+  <br>
+  <input type="button" class="btn btn-primary" value="Regular" onclick="relocate('regular')">
+  <input type="button" class="btn btn-primary" value="Royal" onclick="relocate('royal')">
+  <input type="button" class="btn btn-primary" value="Big Mac" onclick="relocate('BM')">
+  
+  
+  <script>
+    function relocate(loc)
+    {
+       location.href = `./${loc}`;
+    } 
+  </script>
+</div>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
