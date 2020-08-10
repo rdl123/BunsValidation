@@ -12,7 +12,7 @@ import time
 import uuid
 import base64
 from openpyxl import *
-from model_retraining import retrain_model, retrain_model_BM,insertImage_Regular,insertImage_BM,insertImage_royal
+from model_retraining import retrain_model_royal, retrain_model_BM,retrain_model_regular,insertImage_Regular,insertImage_BM,insertImage_royal
 from flask_mail import Mail,Message
 
 
@@ -28,6 +28,7 @@ path=''
 # loading the export.pkl file
 learner_BM = load_learner(path,'model_bm.pkl')
 learner_Reg = load_learner(path,'model_Regular.pkl')
+learner_Roy = load_learner(path,'model_royal.pkl')
 
 
 
@@ -60,6 +61,21 @@ def predict_Reg(file):
 def predict_BM(file):
     x = open_image(file)  # Opening the image
     array = learner_BM.predict(x)  # returning Tuple containing the category ++ the label ++ the prediction
+    result = array[2].tolist()  # transforming the tensor to a list
+    answer = np.argmax(result)  # Returns the indices of the maximum values along an axis.
+    prob = max(result)  # returning the maximum probablity
+    # depending on label of the answer we give the name of the bun
+    if answer == 0:
+        print("Label: Over")
+    elif answer == 1:
+        print("Label: Target")
+    elif answer == 2:
+        print("Label: Under")
+    return answer, prob  # returning the answer and probability
+
+def predict_Royal(file):
+    x = open_image(file)  # Opening the image
+    array = learner_Roy.predict(x)  # returning Tuple containing the category ++ the label ++ the prediction
     result = array[2].tolist()  # transforming the tensor to a list
     answer = np.argmax(result)  # Returns the indices of the maximum values along an axis.
     prob = max(result)  # returning the maximum probablity
@@ -197,7 +213,7 @@ def upload_file_royal():
 
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(file_path)  # adding the file to upload folder
-            result, prob = predict_Reg(file_path)
+            result, prob = predict_Royal(file_path)
             if result == 0:
                 label = 'Over'
             elif result == 1:
@@ -382,11 +398,13 @@ def Validate(name):
 # Start the Training of the ML model
 @app.route('/StartTraining')
 def Train():
+    retrain_model_regular()
     retrain_model_BM()
-    #message=Message("Updating The Model",sender="Buns.vision@gmail.com",recipients=[session['userEmail']])
-    #message.body = "The Machine learning Model is Updated successfully"
-    #mail.send(message)
-    flash("The machine learning model is Updated","primary")
+    retrain_model_royal()
+    message=Message("Updating The Model",sender="Buns.vision@gmail.com",recipients=[session['userEmail']])
+    message.body = "The Machine learning Model is Updated successfully"
+    mail.send(message)
+    flash("The machine learning models are Updated","primary")
     return redirect(url_for('identify'))
 
 

@@ -11,13 +11,13 @@ justify-content: space-evenly;
 
 
 .bun_images{
-    
-    top: 70%;
-    transform: translateY(120%) translateX(-1%) ;
 
+    transform: translateY(50%) translateX(-1%) ;
+    z-index: 100;
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+    
     
     
     }

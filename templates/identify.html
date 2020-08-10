@@ -1,41 +1,45 @@
 {%extends "layout.html" %}
 {% block body %}
-<div class="container mt-5" >
-    <h2 class="mx-auto text-center">Choose your Bun</h2>
-  <svg style="position: absolute;  left: 20%;" width="20%" height="30%" viewBox="0 0 16 16" class="bi bi-arrow-90deg-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-    <path fill-rule="evenodd" d="M2.646 9.646a.5.5 0 0 1 .708 0L6 12.293l2.646-2.647a.5.5 0 1 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z"/>
-    <path fill-rule="evenodd" d="M6 13a.5.5 0 0 1-.5-.5V6A2.5 2.5 0 0 1 8 3.5h5.5a.5.5 0 0 1 0 1H8A1.5 1.5 0 0 0 6.5 6v6.5a.5.5 0 0 1-.5.5z"/>
-  </svg>
-  <svg style="position: absolute;  left: 40%;" width="20%" height="30%" viewBox="0 0 16 16" class="bi bi-arrow-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-    <path fill-rule="evenodd" d="M4.646 9.646a.5.5 0 0 1 .708 0L8 12.293l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z"/>
-    <path fill-rule="evenodd" d="M8 2.5a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-1 0V3a.5.5 0 0 1 .5-.5z"/>
-  </svg>
-  <svg  style="position: absolute;  left: 60%; transform: rotate(90deg);"  width="20%" height="30%" viewBox="0 0 16 16" class="bi bi-arrow-90deg-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-    <path fill-rule="evenodd" d="M9.896 2.396a.5.5 0 0 0 0 .708l2.647 2.646-2.647 2.646a.5.5 0 1 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708 0z"/>
-    <path fill-rule="evenodd" d="M13.25 5.75a.5.5 0 0 0-.5-.5h-6.5a2.5 2.5 0 0 0-2.5 2.5v5.5a.5.5 0 0 0 1 0v-5.5a1.5 1.5 0 0 1 1.5-1.5h6.5a.5.5 0 0 0 .5-.5z"/>
-  </svg>
+    <h2 class="mx-auto text-center mt-3">Choose your Bun</h2>
+    <div class="container marketing mt-3 ">
+      <!-- Three columns of text below the carousel -->
+      <div class="row">
+        <div class="col-lg-4">
+          <svg class="bd-placeholder-img rounded-circle" width="50" height="140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 140x140"><title>Placeholder</title> <img src="../static/assets/Regular2.png" alt="" width="30%"  onclick="relocate('regular')"></svg>
+          <h2>Regular</h2>
+          <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p>
+          <p><a class="btn btn-warning" href="/regular" role="button" >check Bun &raquo;</a></p>
+        </div><!-- /.col-lg-4 -->
+        <div class="col-lg-4">
+          <svg class="bd-placeholder-img rounded-circle" width="50" height="140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 140x140"><title>Placeholder</title> <img src="../static/assets/bigMac.png" alt="" width="30%"  onclick="relocate('BM')"></svg>
+          <h2>Big Mac</h2>
+          <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
+          <p><a class="btn btn-warning" href="/BM" role="button">check Bun &raquo;</a></p>
+        </div><!-- /.col-lg-4 -->
+        <div class="col-lg-4">
+          <svg class="bd-placeholder-img rounded-circle" width="50" height="140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 140x140"><title>Placeholder</title> <img src="../static/assets/royal.png" alt="" width="30%"  onclick="relocate('royal')"></svg>
+          <h2>Royal</h2>
+          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+          <p><a class="btn btn-warning" href="/royal" role="button">View details &raquo;</a></p>
+        </div><!-- /.col-lg-4 -->
+      </div><!-- /.row -->
+    </div>
+
   <br>
   <br>
 
   
- <div class="type_button">
-  <input id="regular" type="button" class="btn btn-primary" value="Regular" onclick="relocate('regular')">
-  <input id="royal" type="button" class="btn btn-primary" value="Royal" onclick="relocate('royal')">
-  <input id="bm" type="button" class="btn btn-primary" value="Big Mac" onclick="relocate('BM')">
-</div>
 
-  <div class="bun_images">
-    <img src="../static/assets/Regular2.png" alt="" width="20%">
-    <img src="../static/assets/royal.png" alt="" width="20%" >
-    <img src="../static/assets/bigMac.png" alt="" width="15%">
-  </div>
+
+
+
   <script>
     function relocate(loc)
     {
        location.href = `./${loc}`;
     } 
   </script>
-</div>
+
 
 {% endblock %}
 
