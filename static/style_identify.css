@@ -1,0 +1,23 @@
+.type_button{
+position: relative;
+top: 70%;
+transform: translateY(700%);
+display: flex;
+align-items: center;
+justify-content: space-evenly;
+
+
+}
+
+
+.bun_images{
+    
+    top: 70%;
+    transform: translateY(120%) translateX(-1%) ;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    
+    
+    }
