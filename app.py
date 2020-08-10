@@ -133,7 +133,7 @@ def upload_file_regular():
     if request.method == 'POST':
         import time
         start_time = time.time()  # retuning the current time in seconds
-        file = request.files['file']
+        file = request.files['fileup']
 
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)  # secure filename before storing it directly on the filesystem.
@@ -141,6 +141,7 @@ def upload_file_regular():
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(file_path)  # adding the file to upload folder
             result, prob = predict_Reg(file_path)
+            proba=round(prob,4)*100
             if result == 0:
                 label = 'Over'
             elif result == 1:
@@ -156,7 +157,7 @@ def upload_file_regular():
             os.rename(file_path, os.path.join(app.config['UPLOAD_FOLDER'], filename))
             print("--- %s seconds ---" % str(
                 time.time() - start_time))  # printing the time that took to upload and giving the result
-            return render_template('template.html', label=label, probabilty=prob, imagesource='../uploads/' + filename)
+            return render_template('template.html', label=label, probabilty=proba, imagesource='../uploads/' + filename)
 
 @app.route('/BM')
 def BM():
@@ -177,6 +178,7 @@ def upload_file_BM():
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(file_path)  # adding the file to upload folder
             result, prob = predict_BM(file_path)
+            proba=round(prob,4)*100
             if result == 0:
                 label = 'Over'
             elif result == 1:
@@ -192,7 +194,7 @@ def upload_file_BM():
             os.rename(file_path, os.path.join(app.config['UPLOAD_FOLDER'], filename))
             print("--- %s seconds ---" % str(
                 time.time() - start_time))  # printing the time that took to upload and giving the result
-            return render_template('template.html', label=label, probabilty=prob, imagesource='../uploads/' + filename)
+            return render_template('template.html', label=label, probabilty=proba, imagesource='../uploads/' + filename)
 
 
 @app.route('/royal')
@@ -214,6 +216,7 @@ def upload_file_royal():
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(file_path)  # adding the file to upload folder
             result, prob = predict_Royal(file_path)
+            proba=round(prob,4)*100
             if result == 0:
                 label = 'Over'
             elif result == 1:
@@ -226,7 +229,7 @@ def upload_file_royal():
             os.rename(file_path, os.path.join(app.config['UPLOAD_FOLDER'], filename))
             print("--- %s seconds ---" % str(
                 time.time() - start_time))  # printing the time that took to upload and giving the result
-            return render_template('template.html', label=label, probabilty=prob, imagesource='../uploads/' + filename)
+            return render_template('template.html', label=label, probabilty=proba, imagesource='../uploads/' + filename)
 
 from flask import send_from_directory
 
