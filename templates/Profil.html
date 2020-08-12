@@ -1,23 +1,78 @@
 {%extends "layout.html" %}
 {% block body %}
-<div class="container mt-5">
-<form action="" method="post">
-    <div class="form-group mx-auto text-center">
-        <img  src={{session.photo}} class="rounded" style="max-width:100px">
-    </div>
-    <br>
-    <div class="form-group ">
-        <input class="form-control" type="text" placeholder={{session.username}} name="nom" required disabled >
-    </div>
-    <div class="form-group">
-        <input  class="form-control" type="text"placeholder={{session.userprename}} name="prenom" required disabled>
-    </div>
-    <div class="form-group">
-        <input  class="form-control" type="email" placeholder={{session.userEmail}} name="email" required disabled>
-    </div>
-   
-   <button type="submit" class="btn btn-outline-primary"><a href="/modifier">Modifier</a></button>
-</form>
-</div>
+<div class="container emp-profile">
+    <form method="post">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="profile-img">
+                    <img src="{{session.photo}}" alt=""/>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="profile-head">
+                            <h5>
+                                {{session.username}} {{session.userprename}}
+                            </h5>
+                            <h6>
+                                Responsable Qualité
+                            </h6>
+                            <p class="proile-rating"><span>MBI</span></p>
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">About</a>
+                        </li>
+                       
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <a href="/modifier" name="btnAddMore" class="profile-edit-btn" role="button" value="Edit Profile"  >Modifier</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="profile-work">
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="tab-content profile-tab" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Nom</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>{{session.username}}</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Prenom</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>{{session.userprename}}</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Email</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>{{session.userEmail}}</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Profession</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>Responsable Qualite</p>
+                                    </div>
+                                </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>           
 </div>
 {% endblock %}

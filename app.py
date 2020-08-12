@@ -124,7 +124,7 @@ def identify():
 # rendering The template on the main page
 @app.route('/regular')
 def regular():
-    return render_template('template.html', label='', imagesource='../uploads/template.jpg')
+    return render_template('template.html', label='', imagesource='../uploads/template.jpeg')
 
 
 # defining the type of methods
@@ -151,6 +151,7 @@ def upload_file_regular():
 
             print(result)
             print(file_path)
+            print(proba)
 
             filename = my_random_string(6) + filename  # adding a random string to file name
 
@@ -161,7 +162,7 @@ def upload_file_regular():
 
 @app.route('/BM')
 def BM():
-    return render_template('template.html', label='', imagesource='../uploads/template.jpg')
+    return render_template('template.html', label='', imagesource='../uploads/template.jpeg')
 
 
 # defining the type of methods
@@ -170,7 +171,7 @@ def upload_file_BM():
     if request.method == 'POST':
         import time
         start_time = time.time()  # retuning the current time in seconds
-        file = request.files['file']
+        file = request.files['fileup']
 
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)  # secure filename before storing it directly on the filesystem.
@@ -188,6 +189,7 @@ def upload_file_BM():
 
             print(result)
             print(file_path)
+            
 
             filename = my_random_string(6) + filename  # adding a random string to file name
 
@@ -199,7 +201,7 @@ def upload_file_BM():
 
 @app.route('/royal')
 def royal():
-    return render_template('template.html', label='', imagesource='../uploads/template.jpg')
+    return render_template('template.html', label='', imagesource='../uploads/template.jpeg')
 
 
 # defining the type of methods
@@ -208,7 +210,7 @@ def upload_file_royal():
     if request.method == 'POST':
         import time
         start_time = time.time()  # retuning the current time in seconds
-        file = request.files['file']
+        file = request.files['fileup']
 
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)  # secure filename before storing it directly on the filesystem.
@@ -301,7 +303,7 @@ def login():
         email = request.form['email']
         password = request.form['password']
         k = 1
-        while k <= table.item_count + 1:
+        while k <= table.item_count:
             if email == get_users(k).get('Email') and password == get_users(k).get('Password'):
                 if get_users(k).get('IsSuperAdmin') == True:  # if the admin is a super admin than we redirect him to the superadmin page
                     session["logAdmin"] = True
@@ -313,7 +315,7 @@ def login():
                     session['id'] = k
                     flash("your know logged in", "success")
                     return redirect(url_for('admin'))
-                else:
+                else :
                     session["log"] = True
                     session['username'] = get_users(k).get('Nom')
                     session['photo']=get_users(k).get('Photo')
@@ -325,7 +327,8 @@ def login():
                     return redirect(url_for('regular_admin'))
             else:
                 k = k + 1
-        flash("this account doesn't exists", "danger")
+        flash("the password or email are icorrect", "danger")
+        return redirect(url_for('login'))
     return render_template('login.html')
 
 
@@ -352,7 +355,7 @@ def admin():
 @app.route('/regular_admin', methods=['GET', 'POST'])
 def regular_admin():
     if request.method == 'POST':
-        file = request.files['file']
+        file = request.files['fileup']
         commentaire = request.form['Commentaire']
         Type=request.form['type']
         if file and allowed_file(file.filename):
@@ -399,15 +402,33 @@ def Validate(name):
 
 
 # Start the Training of the ML model
-@app.route('/StartTraining')
-def Train():
+@app.route('/StartTrainingRegular')
+def TrainReg():
     retrain_model_regular()
-    retrain_model_BM()
-    retrain_model_royal()
-    message=Message("Updating The Model",sender="Buns.vision@gmail.com",recipients=[session['userEmail']])
-    message.body = "The Machine learning Model is Updated successfully"
+    message=Message("Updating The Regular Model",sender="Buns.vision@gmail.com",recipients=[session['userEmail']])
+    message.body = "The Machine learning Model of the regular bun is Updated successfully"
     mail.send(message)
-    flash("The machine learning models are Updated","primary")
+    flash("The machine learning model is  Updated","primary")
+    return redirect(url_for('identify'))
+
+
+@app.route('/StartTrainingBM')
+def TrainBM():
+    retrain_model_BM()
+    message=Message("Updating The Regular Model",sender="Buns.vision@gmail.com",recipients=[session['userEmail']])
+    message.body = "The Machine learning Model of the Big Mac bun is Updated successfully"
+    mail.send(message)
+    flash("The machine learning model is Updated","primary")
+    return redirect(url_for('identify'))
+
+
+@app.route('/StartTrainingRoyal')
+def TrainRoy():
+    retrain_model_royal()
+    message=Message("Updating The Regular Model",sender="Buns.vision@gmail.com",recipients=[session['userEmail']])
+    message.body = "The Machine learning Model of the royal bun is Updated successfully"
+    mail.send(message)
+    flash("The machine learning model is Updated","primary")
     return redirect(url_for('identify'))
 
 

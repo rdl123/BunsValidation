@@ -1,12 +1,15 @@
 {%extends "layout.html" %}
 
 {% block body %}
-
-<table class=" table table-striped table-bordered table-sm ml-2">
+<div class="row"> 
+  <div class="col-0"></div>
+  <div class="col center">
+    <table class=" table table-striped table-bordered table-sm mt-5 ">
   
       <thead>
         <tr>
           <th  scope="col">image</th>
+          <th  scope="col">image name</th>
           <th  scope="col">Type</th>
           <th  scope="col">commentaire</th>
           
@@ -16,10 +19,10 @@
           
             {% for name in image_names %}
             <tr>
-                  <td>
-                    <img height=15% width=12%  class="img-fluid" alt="Responsive image" loading="eager" src="{{ url_for('static', filename='imageTesting/' + name) }} " >
-                    {{name.split("@")[2]}}
+                  <td class="image_td " style="width:10%">
+                    <img height=20% width=70%  class="img-fluid" alt="Responsive image" loading="eager" src="{{ url_for('static', filename='imageTesting/' + name) }} " >
                   </td>
+                  <td>{{name.split("@")[2]}}</td>
                   <td>{{name.split("@")[1]}}</td>
                   <td>{{name.split("@")[0]}}</td>
                 <td><button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#{{name.split('@')[2][0:-4]+'1'}}">
@@ -48,7 +51,7 @@
                        </div>
                      </div>
                    </div>
-
+  
                    <!-- Modal Validate-->
                    <div class="modal fade" id="{{name.split('@')[2][0:-4]+'1'}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">                   
                     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -64,12 +67,12 @@
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button class="btn btn-outline-primary"><a href="/Validate/{{name}}">Validate</a></button>
+                          <a href="/Validate/{{name}}" class="btn btn-primary" role="button">Validate</a>
                         </div>
                       </div>
                     </div>
                   </div>
-
+  
             </tr>
             
             {%endfor%}
@@ -77,9 +80,32 @@
         </tbody>
    
    
+  
+  </table>
+  </div>
+</div>
+  
+<div class="row">
+  <div class="col-4 "></div>
+  <div class="col-4 center">
+    <a href="/StartTrainingRegular" role="button" class="btnRegister">Train Regular</a>
+  </div>
+</div>
+  
+<div class="row mt-3">
+  <div class="col-4 "></div>
+  <div class="col-4 center">
+    <a href="/StartTrainingBM" role="button" class="btnRegister">Train BigMac</a>
+  </div>
+</div>
+<div class="row mt-3">
+  <div class="col-4 "></div>
+  <div class="col-4 center">
+    <a href="/StartTrainingRoyal" role="button" class="btnRegister">Train Royal</a>
+  </div>
+</div>
 
-</table>
-<button class="btn btn-outline-success"><a href="/StartTraining">Training</a></button>
 
+</div>
 
 {% endblock %}

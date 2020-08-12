@@ -31,13 +31,7 @@
 h4 > strong {
   color: #ff3f3f;
 }
-.btn-primary {
-  border-color: #ff3f3f !important;
-  color: #ffffff;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-  background-color: #ff3f3f !important;
-  border-color: #ff3f3f !important;
-}
+
 
 /*these two are set to not display at start*/
 .imgupload.ok {

@@ -1,6 +1,8 @@
-{% extends "regular.html" %} {% block content %}
+{% extends "bun_prediction.html" %} 
 
-<img class="card-img-top" src="{{imagesource}}" width="200px" height="250px" alt="Card image cap">
+{% block content %}
+
+<img class="card-img-top" src="{{imagesource}}" width="200px" height="250px" alt=" image cap">
 <ul class="list-group list-group-flush">
 	<li class="list-group-item"><span style="font-weight: bold;">Cuisson: </span>{{label}}</li>
     <li class="list-group-item"><span style="font-weight: bold;">Probabilty: </span>{{probabilty}}%</li>
@@ -8,3 +10,32 @@
 </ul>
 
 {% endblock %}
+
+{% block popup %}
+
+{% if (label != "Target") and (label !="")  %}
+<div class="card text-white bg-danger mb-3 ml-5" style="max-width: 18rem;">
+    <div class="card-header">{{label}}</div>
+    <div class="card-body">
+        {% if (label == "Under") and (label !="")  %}
+         <h5 class="card-title">Not Coocked enough</h5>
+         {% endif%}
+         {% if (label == "Over") and (label !="")  %}
+         <h5 class="card-title">Coocked for a long period of time</h5>
+         {% endif%}
+    </div>
+  </div>
+{% endif%}
+{% if (label == "Target") and (label !="")  %}
+<div class="card text-white bg-success mb-3 ml-5" style="max-width: 18rem;">
+    <div class="card-header">{{label}}</div>
+    <div class="card-body">
+        
+         <h5 class="card-title">Perfectly coocked</h5>
+        
+         
+    </div>
+  </div>
+{% endif%}
+{% endblock %}
+

@@ -2,37 +2,70 @@
 
 
 {% block body %}
-<div class="container">
-    <h1>Registration</h1>
-    <br>
-    <form action="" method="post">
-           <div class="form-group">
-                <input class="form-control" type="text" placeholder="Nom" name="nom" required >
+<div class="container register">
+    <div class="row">
+        <div class="col-md-3 register-left">
+            <img src="../static/assets/bun.png" alt=""/>
+            <h3>Welcome</h3>
+            <p>Welcome our dear beloved Mr {{session.username}} ❤️❤️❤️❤️!</p>
         </div>
-    <div class="form-group">
-        <input  class="form-control" type="text" placeholder="Prenom" name="prenom" required>
+        <div class="col-md-9 register-right">
+            <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Employee</a>
+                </li>
+               
+            </ul>
+            <form action="" method="post">
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <h3 class="register-heading">Add an Admin</h3>
+                    <div class="row register-form">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="nom" placeholder="First Name *" value="" />
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="prenom" placeholder="Last Name *" value="" />
+                            </div>
+                            <div class="form-group">
+                                <input type="password" name="password" class="form-control" placeholder="Password *" value="" />
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" name="confirmpassword"  placeholder="Confirm Password *" value="" />
+                            </div>
+                            <div class="form-group">
+                                <div class="maxl">
+                                    <label class="radio inline"> 
+                                        <input type="radio" name="gender" value="male" checked>
+                                        <span> Male </span> 
+                                    </label>
+                                    <label class="radio inline"> 
+                                        <input type="radio" name="gender" value="female">
+                                        <span>Female </span> 
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input type="email" class="form-control" name="email" placeholder="Your Email *" value="" />
+                            </div>
+                            <div class="form-group">
+                                <select class="form-control" name="isSuperAdmin">
+                                    <option class="hidden"  selected disabled>Is Super Admin</option>
+                                    <option>True</option>
+                                    <option>False</option>
+                                </select>
+                            </div>
+                            <input type="submit" class="btnRegister"  value="Register"/>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <input  class="form-control" type="email" placeholder="email" name="email" required >
-    </div>
-    <div class="form-group">
-        <input class="form-control" type="password" placeholder="Password" name="password" required>
-    </div>
-    <div class="form-group">
-        <input class="form-control" type="password" placeholder="Confirm Password" name="confirmpassword" required>
-    </div>
- 
-        
-        <select class="browser-default custom-select" name="isSuperAdmin">
-            <option selected>Is Super Admin</option>
-            <option value="True">True</option>
-            <option value="False">False</option>
-          </select>
-        
-  
-    
-       <input  class="btn btn-primary mt-2" type="submit" value="Register">
-    </form>
- 
+
 </div>
 {% endblock %}

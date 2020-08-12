@@ -3,17 +3,44 @@
 
 
 {% block body %}
-<div class="container">
-  <h1>Please login</h1>
-  <br>
-  <form action="" method="post">
-    <div class="form-group">
-     <input type="email" placeholder="email" name="email" required class="form-control">
-     </div>
-     <div class="form-group">
-     <input type="password" placeholder="Password" name="password" required class="form-control" >
-     </div>
-    <input class="btn btn-primary" type="submit" value="Login">
-  </form>
+
+<div class="container register mt-5 ">
+  <div class="row">
+      <div class="col-md-3 register-left">
+          <img src="../static/assets/bun.png" alt=""/>
+          <h3>Welcome</h3>
+          <p>Welcome our dear beloved employee ❤️❤️❤️❤️!</p>
+      </div>
+      <div class="col-md-9 register-right">
+          <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
+              <li class="nav-item">
+                  <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Employee</a>
+              </li>
+             
+          </ul>
+          <form action="" method="post">
+          <div class="tab-content" id="myTabContent">
+              <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                  <h3 class="register-heading">Member Login</h3>
+                  <div class="row register-form">
+                      <div class="col-md-6">
+                        <div class="form-label-group">
+                          <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+                          <label for="inputEmail">Email address</label>
+                        </div>                      
+                          <div class="form-group">
+                              <input type="password" name="password" class="form-control" placeholder="Password *" value="" />
+                          </div>
+                      </div>
+                      <div class="col-md-6">
+                          <input type="submit" class="btnRegister"  value="Login"/>
+                      </div>
+                  </div>
+              </div>
+          </form>
+          </div>
+      </div>
+  </div>
+
 </div>
 {% endblock %}
