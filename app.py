@@ -14,10 +14,16 @@ import base64
 from openpyxl import *
 from model_retraining import retrain_model_royal, retrain_model_BM,retrain_model_regular,insertImage_Regular,insertImage_BM,insertImage_royal
 from flask_mail import Mail,Message
+from botocore.config import Config
+from PIL import Image
 
 
 
+# lanching the Flask app............................................................
+app = Flask(__name__)
 
+
+mail=Mail(app)
 #S3 bucket
 s3 = boto3.resource('s3')
 BUCKET = "bun-image-profile"
@@ -36,7 +42,14 @@ learner_Roy = load_learner(path,'model_royal.pkl')
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = set(['jpg', 'jpeg'])
 
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER  # The UPLOAD_FOLDER is where we will store the uploaded image files
 
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config["MAIL_PORT"] = 465
+app.config['MAIL_USERNAME'] = ''
+app.config['MAIL_PASSWORD'] = ''
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
 # convert the content of url to base64
 def get_as_base64(url):
     return base64.b64encode(requests.get(url).content)
@@ -45,6 +58,7 @@ def get_as_base64(url):
 # function that predicts the proba and the type of img..............................................
 def predict_Reg(file):
     x = open_image(file)  # Opening the image
+    #x.resize(torch.Size([x.shape[0],1280,960]))
     array = learner_Reg.predict(x)  # returning Tuple containing the category ++ the label ++ the prediction
     result = array[2].tolist()  # transforming the tensor to a list
     answer = np.argmax(result)  # Returns the indices of the maximum values along an axis.
@@ -103,18 +117,7 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 
-# lanching the Flask app............................................................
-app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER  # The UPLOAD_FOLDER is where we will store the uploaded image files
 
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config["MAIL_PORT"] = 465
-app.config['MAIL_USERNAME'] = 'Buns.vision@gmail.com'
-app.config['MAIL_PASSWORD'] = 'bigdata@2020'
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
-
-mail=Mail(app)
 
 # defining routes .....................................................................................
 @app.route("/identify")
@@ -137,7 +140,6 @@ def upload_file_regular():
 
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)  # secure filename before storing it directly on the filesystem.
-
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(file_path)  # adding the file to upload folder
             result, prob = predict_Reg(file_path)
@@ -214,8 +216,8 @@ def upload_file_royal():
 
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)  # secure filename before storing it directly on the filesystem.
-
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file = image.resize((400, 400))
             file.save(file_path)  # adding the file to upload folder
             result, prob = predict_Royal(file_path)
             proba=round(prob,4)*100
@@ -483,4 +485,4 @@ def modifier():
 if __name__ == "__main__":
     app.secret_key = "1234567"
     app.debug = True
-    app.run()
+    app.run(host='0.0.0.0')
