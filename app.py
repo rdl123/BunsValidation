@@ -483,6 +483,6 @@ def modifier():
     return render_template('modifierProfil.html')
 
 if __name__ == "__main__":
-    app.secret_key = ""
+    app.secret_key = "1234567"
     app.debug = True
     app.run(host='0.0.0.0')
