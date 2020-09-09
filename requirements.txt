@@ -45,10 +45,6 @@ jedi==0.17.1
 Jinja2==2.11.2
 jmespath==0.10.0
 jsonschema==3.2.0
-jupyter==1.0.0
-jupyter-client==6.1.5
-jupyter-console==6.1.0
-jupyter-core==4.6.3
 kiwisolver==1.2.0
 lazy-object-proxy==1.4.3
 MarkupSafe==1.1.1
@@ -83,7 +79,6 @@ pyparsing==2.4.7
 pyrsistent==0.16.0
 python-dateutil==2.8.1
 python-multipart==0.0.5
-pytz==2020.1
 pywin32==228
 pywinpty==0.5.7
 PyYAML==5.3.1
