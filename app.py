@@ -46,8 +46,8 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER  # The UPLOAD_FOLDER is where we wil
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config["MAIL_PORT"] = 465
-app.config['MAIL_USERNAME'] = ''
-app.config['MAIL_PASSWORD'] = ''
+app.config['MAIL_USERNAME'] = 'Buns.vision@gmail.com'
+app.config['MAIL_PASSWORD'] = 'bigdata@2020'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 # convert the content of url to base64
@@ -217,7 +217,6 @@ def upload_file_royal():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)  # secure filename before storing it directly on the filesystem.
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file = image.resize((400, 400))
             file.save(file_path)  # adding the file to upload folder
             result, prob = predict_Royal(file_path)
             proba=round(prob,4)*100
