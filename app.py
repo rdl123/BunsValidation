@@ -22,7 +22,7 @@ from PIL import Image
 # lanching the Flask app............................................................
 app = Flask(__name__)
 
-
+app.secret_key = "1234567"
 mail=Mail(app)
 #S3 bucket
 s3 = boto3.resource('s3')
@@ -46,8 +46,8 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER  # The UPLOAD_FOLDER is where we wil
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config["MAIL_PORT"] = 465
-app.config['MAIL_USERNAME'] = ''
-app.config['MAIL_PASSWORD'] = ''
+app.config['MAIL_USERNAME'] = 'Buns.vision@gmail.com'
+app.config['MAIL_PASSWORD'] = 'bigdata@2020'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 # convert the content of url to base64
@@ -127,7 +127,7 @@ def identify():
 # rendering The template on the main page
 @app.route('/regular')
 def regular():
-    return render_template('template.html', label='', imagesource='../uploads/template.jpeg')
+    return render_template('template.html', label='', imagesource='../static/assets/template.png')
 
 
 # defining the type of methods
@@ -164,7 +164,7 @@ def upload_file_regular():
 
 @app.route('/BM')
 def BM():
-    return render_template('template.html', label='', imagesource='../uploads/template.jpeg')
+    return render_template('template.html', label='', imagesource='../static/assets/template.png')
 
 
 # defining the type of methods
@@ -203,7 +203,7 @@ def upload_file_BM():
 
 @app.route('/royal')
 def royal():
-    return render_template('template.html', label='', imagesource='../uploads/template.jpeg')
+    return render_template('template.html', label='', imagesource='../static/assets/template.png')
 
 
 # defining the type of methods
@@ -482,6 +482,5 @@ def modifier():
     return render_template('modifierProfil.html')
 
 if __name__ == "__main__":
-    app.secret_key = "1234567"
     app.debug = True
     app.run(host='0.0.0.0')
