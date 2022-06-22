@@ -58,7 +58,7 @@ nbformat==5.0.7
 nest-asyncio==1.4.0
 notebook==6.0.3
 numexpr==2.7.1
-numpy==1.19.0
+numpy==1.22.0
 nvidia-ml-py3==7.352.0
 openpyxl==3.0.4
 packaging==20.4
